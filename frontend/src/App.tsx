@@ -23,8 +23,8 @@ function Nav() {
 
   return (
     <nav>
-      <Link to="/">{t('nav_bounties')}</Link>
-      <Link to="/create">{t('nav_create_bounty')}</Link>
+      <Link to="/">Bounties</Link>
+      <Link to="/create" role="button">Create Bounty</Link>
       <WalletConnectButton address={address} onConnect={connect} />
     </nav>
   );

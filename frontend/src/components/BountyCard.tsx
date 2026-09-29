@@ -1,12 +1,13 @@
-import { Bounty } from '../lib/types';
-import { Bounty as ApiBounty } from '../types';
-import { shortenAddress, formatRelative, isDeadlineUrgent } from '../utils/format';
-import { CopyButton } from './CopyButton';
-import { useTranslation } from '../i18n';
+import { Bounty } from "../lib/types";
+import { Bounty as ApiBounty } from "../types";
+import { shortenAddress } from "../utils/format";
+import { CopyButton } from "./CopyButton";
+import { BountyCardSkeleton } from "./BountyCardSkeleton";
 
 interface BountyCardProps {
   bounty?: Bounty | ApiBounty;
   loading?: boolean;
+  highlighted?: boolean;
 }
 
 // Skeleton placeholder shown in place of a BountyCard while its bounty data
@@ -23,24 +24,15 @@ function BountyCardSkeleton() {
   );
 }
 
-export function BountyCard({ bounty, loading }: BountyCardProps) {
-  const { t } = useTranslation();
-
+export function BountyCard({ bounty, loading, highlighted }: BountyCardProps) {
   if (loading || !bounty) {
     return <BountyCardSkeleton />;
   }
 
-  // Only lib/types Bounty has a `deadline` field.
-  const deadline = 'deadline' in bounty ? bounty.deadline : undefined;
-  const urgent = isDeadlineUrgent(deadline);
-  const relativeDeadline = formatRelative(deadline);
-  const exactDeadline =
-    deadline != null
-      ? new Date(deadline * 1000).toLocaleString()
-      : null;
+  const className = highlighted ? "bounty-card bounty-card--highlighted" : "bounty-card";
 
   return (
-    <div className="bounty-card">
+    <div className={className}>
       <span className="bounty-card__id" title={bounty.id}>
         {shortenAddress(bounty.id)}
         <CopyButton value={bounty.id} />
